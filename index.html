@@ -1,608 +1,1540 @@
-```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Film Cách Nhiệt Ô Tô - Bảng Giá Tốt Nhất 2024</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
-        }
-
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-        }
-
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-menu a:hover {
-            color: #2563eb;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #2563eb, #1d4ed8);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: #2563eb;
-            border-color: #2563eb;
-        }
-
-        .btn-secondary:hover {
-            background: #2563eb;
-            color: white;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            gap: 4px;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: #333;
-            transition: 0.3s;
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
-        }
-
-        .hero-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            color: white;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: rgba(255,255,255,0.9);
-            margin-bottom: 2rem;
-        }
-
-        .hero-image {
-            text-align: center;
-        }
-
-        .hero-image img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 20px;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.3);
-        }
-
-        /* Sections */
-        section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: clamp(2rem, 4vw, 3rem);
-            margin-bottom: 3rem;
-            color: #1f2937;
-        }
-
-        /* Features */
-        .features {
-            background: #f8fafc;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 2.5rem 2rem;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        }
-
-        .feature-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(45deg, #2563eb, #1d4ed8);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 2rem;
-            color: white;
-        }
-
-        /* Pricing */
-        .pricing {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-top: 4rem;
-        }
-
-        .pricing-card {
-            background: white;
-            border-radius: 25px;
-            padding: 3rem 2rem;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            position: relative;
-            transition: all 0.4s;
-            border: 2px solid transparent;
-        }
-
-        .pricing-card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
-        }
-
-        .pricing-card.popular {
-            border-color: #2563eb;
-            transform: scale(1.05);
-        }
-
-        .pricing-card.popular .price {
-            color: #2563eb;
-        }
-
-        .price {
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 800;
-            color: #059669;
-            margin: 1rem 0;
-        }
-
-        .pricing-card.popular .price {
-            color: #2563eb;
-        }
-
-        .features-list {
-            list-style: none;
-            margin: 2rem 0;
-        }
-
-        .features-list li {
-            padding: 0.5rem 0;
-            color: #6b7280;
-        }
-
-        .features-list li::before {
-            content: '✔';
-            color: #10b981;
-            font-weight: bold;
-            margin-right: 0.5rem;
-        }
-
-        /* Services Detail */
-        .services-detail {
-            background: white;
-        }
-
-        .service-categories {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .service-category {
-            background: #f8fafc;
-            padding: 2rem;
-            border-radius: 20px;
-            border-left: 5px solid #2563eb;
-        }
-
-        /* Advantages */
-        .advantages {
-            background: #f8fafc;
-        }
-
-        .advantages-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        /* Testimonials */
-        .testimonials {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .testimonial {
-            background: rgba(255,255,255,0.1);
-            padding: 2rem;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        .stars {
-            color: #fbbf24;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-        }
-
-        /* FAQ */
-        .faq-item {
-            background: white;
-            margin-bottom: 1rem;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .faq-question {
-            padding: 1.5rem 2rem;
-            background: #f8fafc;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .faq-question:hover {
-            background: #e2e8f0;
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            background: white;
-        }
-
-        .faq-answer.active {
-            max-height: 200px;
-        }
-
-        .faq-answer p {
-            padding: 1.5rem 2rem;
-            margin: 0;
-            color: #6b7280;
-        }
-
-        /* Contact */
-        .contact {
-            background: linear-gradient(135deg, #f8fafc 0%, white 100%);
-        }
-
-        .contact-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-        }
-
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .contact-item i {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(45deg, #2563eb, #1d4ed8);
-            color: white;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .contact-form {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-family: inherit;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #2563eb;
-        }
-
-        /* Footer */
-        footer {
-            background: #1f2937;
-            color: white;
-            text-align: center;
-            padding: 3rem 2rem 1rem;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate {
-            opacity: 0;
-            animation: fadeInUp 0.8s ease forwards;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            .nav-menu {
-                position: fixed;
-                top: 80px;
-                left: -100%;
-                width: 100%;
-                height: calc(100vh - 80px);
-                background: white;
-                flex-direction: column;
-                justify-content: flex-start;
-                align-items: center;
-                padding-top: 2rem;
-                transition: left 0.3s;
-            }
-
-            .nav-menu.active {
-                left: 0;
-            }
-
-            .cta-buttons {
-                display: none;
-            }
-
-            .hero-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-                gap: 2rem;
-            }
-
-            .contact-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            section {
-                padding: 3rem 1rem;
-            }
-        }
-
-        /* Scroll animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bảng Giá Dịch Vụ Chuyên Nghiệp</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #111827;
+      --panel: rgba(255,255,255,0.08);
+      --panel-strong: rgba(255,255,255,0.12);
+      --line: rgba(255,255,255,0.12);
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --white: #ffffff;
+      --primary: #22c55e;
+      --primary-2: #16a34a;
+      --accent: #38bdf8;
+      --warning: #f59e0b;
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      --radius-xl: 26px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --container: 1180px;
+      --transition: all 0.28s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.14), transparent 24%),
+        linear-gradient(180deg, #0b1120 0%, #0f172a 100%);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      width: min(var(--container), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .section {
+      padding: 90px 0;
+    }
+
+    .section-title {
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.15;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: var(--white);
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      max-width: 760px;
+      font-size: 17px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      color: #cbd5e1;
+      font-size: 13px;
+      margin-bottom: 18px;
+      backdrop-filter: blur(8px);
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+      box-shadow: 0 0 14px var(--primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 24px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      font-size: 15px;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%);
+      box-shadow: 0 12px 28px rgba(34, 197, 94, 0.28);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(34, 197, 94, 0.36);
+    }
+
+    .btn-secondary {
+      color: var(--white);
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+    }
+
+    .btn-secondary:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.12);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+
+    .reveal.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Header */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: var(--transition);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid transparent;
+    }
+
+    .header.scrolled {
+      background: rgba(10, 15, 28, 0.86);
+      border-bottom-color: rgba(255,255,255,0.08);
+    }
+
+    .nav {
+      height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: fit-content;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      font-weight: 800;
+      box-shadow: 0 10px 26px rgba(56, 189, 248, 0.25);
+    }
+
+    .brand-text h1 {
+      font-size: 17px;
+      line-height: 1.15;
+      color: var(--white);
+    }
+
+    .brand-text p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .menu {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+      margin-left: auto;
+    }
+
+    .menu a {
+      color: #cbd5e1;
+      font-size: 14px;
+      transition: var(--transition);
+    }
+
+    .menu a:hover {
+      color: var(--white);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: var(--white);
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 56px 0 40px;
+    }
+
+    .hero-wrap {
+      min-height: calc(100vh - 100px);
+      display: grid;
+      grid-template-columns: 1.02fr 0.98fr;
+      align-items: center;
+      gap: 34px;
+    }
+
+    .hero-copy h2 {
+      font-size: clamp(38px, 6vw, 68px);
+      line-height: 1.04;
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 18px;
+    }
+
+    .hero-copy h2 span {
+      background: linear-gradient(135deg, #ffffff 0%, #86efac 40%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-copy p {
+      font-size: 18px;
+      color: #cbd5e1;
+      max-width: 620px;
+      margin-bottom: 28px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.09);
+      backdrop-filter: blur(14px);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 26px;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero-visual {
+      position: relative;
+    }
+
+    .hero-panel {
+      padding: 22px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+    }
+
+    .visual-banner {
+      min-height: 480px;
+      border-radius: 24px;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(140deg, rgba(15, 23, 42, 0.35), rgba(15, 23, 42, 0.72)),
+        url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80') center/cover;
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+    }
+
+    .floating-badge {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.18);
+      border: 1px solid rgba(134, 239, 172, 0.35);
+      color: #dcfce7;
+      font-size: 13px;
+      font-weight: 700;
+      backdrop-filter: blur(12px);
+    }
+
+    .visual-info {
+      width: min(100%, 430px);
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(2, 6, 23, 0.55);
+      border: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(10px);
+    }
+
+    .visual-info h3 {
+      color: var(--white);
+      margin-bottom: 8px;
+      font-size: 22px;
+    }
+
+    .visual-info p {
+      color: #d1d5db;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .visual-list {
+      display: grid;
+      gap: 10px;
+      color: #e2e8f0;
+      font-size: 14px;
+    }
+
+    .visual-list div::before {
+      content: "✓";
+      color: #86efac;
+      margin-right: 8px;
+      font-weight: 700;
+    }
+
+    /* Trust */
+    .trust-grid {
+      margin-top: 34px;
+    }
+
+    .trust-card {
+      padding: 26px;
+      transition: var(--transition);
+    }
+
+    .trust-card:hover,
+    .feature-card:hover,
+    .detail-card:hover,
+    .testimonial:hover,
+    .gallery-item:hover,
+    .contact-box:hover {
+      transform: translateY(-6px);
+      background: var(--panel-strong);
+    }
+
+    .icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(56,189,248,0.22), rgba(34,197,94,0.24));
+      color: var(--white);
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .trust-card h3,
+    .feature-card h3,
+    .detail-card h3,
+    .testimonial h3,
+    .contact-box h3 {
+      color: var(--white);
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+
+    .trust-card p,
+    .feature-card p,
+    .detail-card p,
+    .contact-box p {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* Pricing */
+    .pricing-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 34px;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+    }
+
+    .price-card {
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .price-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255,255,255,0.16);
+    }
+
+    .price-card.popular {
+      border-color: rgba(34, 197, 94, 0.36);
+      box-shadow: 0 18px 48px rgba(34, 197, 94, 0.14);
+      background: linear-gradient(180deg, rgba(34,197,94,0.12), rgba(255,255,255,0.07));
+    }
+
+    .tag {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.18);
+      color: #fde68a;
+      border: 1px solid rgba(245, 158, 11, 0.24);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .plan {
+      color: var(--white);
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .plan-note {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 18px;
+      min-height: 48px;
+    }
+
+    .price {
+      display: flex;
+      align-items: end;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .price strong {
+      font-size: clamp(32px, 4vw, 46px);
+      line-height: 1;
+      color: var(--white);
+    }
+
+    .price span {
+      color: var(--muted);
+      font-size: 15px;
+      padding-bottom: 6px;
+    }
+
+    .price-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+      margin-bottom: 26px;
+    }
+
+    .price-list li {
+      display: flex;
+      align-items: start;
+      gap: 10px;
+      color: #dbe4ee;
+      font-size: 15px;
+    }
+
+    .price-list li::before {
+      content: "✓";
+      color: #86efac;
+      font-weight: 800;
+      margin-top: 1px;
+    }
+
+    .price-card .btn {
+      width: 100%;
+    }
+
+    /* Service details */
+    .details-grid {
+      margin-top: 32px;
+    }
+
+    .detail-card {
+      padding: 24px;
+      transition: var(--transition);
+    }
+
+    .detail-card ul {
+      margin-top: 14px;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .detail-card li {
+      color: #dbe4ee;
+      font-size: 14px;
+      position: relative;
+      padding-left: 18px;
+    }
+
+    .detail-card li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--accent);
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    /* Features */
+    .feature-grid {
+      margin-top: 34px;
+    }
+
+    .feature-card {
+      padding: 24px;
+      transition: var(--transition);
+    }
+
+    /* Testimonials */
+    .testimonial-grid {
+      margin-top: 34px;
+    }
+
+    .testimonial {
+      padding: 24px;
+      transition: var(--transition);
+    }
+
+    .stars {
+      color: #fbbf24;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+      font-size: 18px;
+    }
+
+    .testimonial p {
+      color: #dbe4ee;
+      margin-bottom: 18px;
+      font-size: 15px;
+    }
+
+    .testimonial small {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* Gallery */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 0.8fr;
+      grid-auto-rows: 240px;
+      gap: 16px;
+      margin-top: 34px;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.10);
+      transition: var(--transition);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.45s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.06);
+    }
+
+    .gallery-item.large {
+      grid-row: span 2;
+    }
+
+    .gallery-caption {
+      position: absolute;
+      inset: auto 0 0 0;
+      padding: 16px;
+      background: linear-gradient(180deg, transparent, rgba(2,6,23,0.84));
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    /* FAQ */
+    .faq-wrap {
+      display: grid;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .faq-item {
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--white);
+      text-align: left;
+      padding: 20px 22px;
+      font-size: 17px;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .faq-question span:last-child {
+      font-size: 24px;
+      color: var(--accent);
+      transition: var(--transition);
+    }
+
+    .faq-item.active .faq-question span:last-child {
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .faq-answer p {
+      color: #dbe4ee;
+      padding: 0 22px 20px;
+      font-size: 15px;
+    }
+
+    /* Contact */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 28px;
+      margin-top: 36px;
+    }
+
+    .contact-box,
+    .form-card {
+      padding: 28px;
+    }
+
+    .contact-list {
+      list-style: none;
+      margin-top: 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .contact-list li {
+      color: #dbe4ee;
+      font-size: 15px;
+    }
+
+    .contact-list strong {
+      display: block;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label {
+      color: #dbe4ee;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      min-height: 52px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      color: var(--white);
+      padding: 14px 16px;
+      outline: none;
+      transition: var(--transition);
+      font-family: inherit;
+      font-size: 15px;
+    }
+
+    .field textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: rgba(56, 189, 248, 0.45);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.10);
+    }
+
+    .mini-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 26px 0 34px;
+      margin-top: 20px;
+    }
+
+    .footer-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* Floating CTA */
+    .floating-cta {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .floating-cta a {
+      min-width: 52px;
+      height: 52px;
+      padding: 0 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.92);
+      color: #0f172a;
+      font-weight: 700;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .floating-cta a:hover {
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 1100px) {
+      .grid-4,
+      .feature-grid,
+      .trust-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .pricing-grid,
+      .details-grid,
+      .testimonial-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-wrap,
+      .grid-2,
+      .contact-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .menu,
+      .nav-actions .desktop-cta {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: inline-grid;
+        place-items: center;
+      }
+
+      .mobile-menu {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: calc(100% + 8px);
+        background: rgba(10, 15, 28, 0.98);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 20px;
+        padding: 16px;
+        box-shadow: var(--shadow);
+        display: none;
+      }
+
+      .mobile-menu.open {
+        display: block;
+      }
+
+      .mobile-menu ul {
+        list-style: none;
+        display: grid;
+        gap: 12px;
+      }
+
+      .mobile-menu a {
+        display: block;
+        padding: 12px 14px;
+        border-radius: 14px;
+        color: #e2e8f0;
+        background: rgba(255,255,255,0.04);
+      }
+
+      .mobile-menu .btn {
+        width: 100%;
+        margin-top: 14px;
+      }
+
+      .hero {
+        padding-top: 28px;
+      }
+
+      .hero-copy p,
+      .section-subtitle {
+        font-size: 16px;
+      }
+
+      .pricing-head {
+        align-items: start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .section {
+        padding: 72px 0;
+      }
+
+      .container {
+        width: min(100% - 20px, var(--container));
+      }
+
+      .pricing-grid,
+      .details-grid,
+      .feature-grid,
+      .testimonial-grid,
+      .grid-4,
+      .trust-grid,
+      .gallery-grid,
+      .hero-metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-item.large {
+        grid-row: span 1;
+      }
+
+      .visual-banner {
+        min-height: 380px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .hero-actions .btn,
+      .pricing-head .btn {
+        width: 100%;
+      }
+
+      .contact-layout {
+        gap: 18px;
+      }
+
+      .floating-cta {
+        right: 12px;
+        bottom: 12px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <nav>
-            <a href="#" class="logo">FilmPro</a>
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#home">Trang chủ</a></li>
-                <li><a href="#pricing">Bảng giá</a></li>
-                <li><a href="#services">Dịch vụ</a></li>
-                <li><a href="#advantages">Ưu điểm</a></li>
-                <li><a href="#testimonials">Đánh giá</a></li>
-                <li><a href="#contact">Liên hệ</a></li>
-            </ul>
-            <div class="cta-buttons">
-                <a href="#pricing" class="btn btn-secondary">Xem bảng giá</a>
-                <a href="#contact" class="btn btn-primary">Liên hệ ngay</a>
-            </div>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </nav>
-    </header>
+  <!-- Header -->
+  <header class="header" id="topHeader">
+    <div class="container">
+      <nav class="nav">
+        <a href="#" class="brand">
+          <div class="brand-mark">BG</div>
+          <div class="brand-text">
+            <h1>Bảng Giá Pro</h1>
+            <p>Landing page dịch vụ chuyên nghiệp</p>
+          </div>
+        </a>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <div>
-                <h1>Giải pháp film cách nhiệt chuyên nghiệp</h1>
-                <p>Chống nóng hiệu quả 99% - Bảo hành 10 năm - Thi công tận nơi - Giá minh bạch từ 1.990.000đ</p>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <a href="#pricing" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">Xem bảng giá</a>
-                    <a href="#contact" class="btn btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem;">Liên hệ ngay</a>
-                </div>
-            </div>
-            <div class="hero-image">
-                <div style="width: 500px; height: 400px; background: rgba(255,255,255,0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: white; margin: 0 auto;">
-                    <i class="fas fa-car"></i>
-                </div>
-            </div>
+        <ul class="menu">
+          <li><a href="#hero">Trang chủ</a></li>
+          <li><a href="#pricing">Bảng giá</a></li>
+          <li><a href="#services">Dịch vụ</a></li>
+          <li><a href="#benefits">Ưu điểm</a></li>
+          <li><a href="#reviews">Đánh giá</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <a class="btn btn-primary desktop-cta" href="#contact">Nhận báo giá ngay</a>
+          <button class="menu-toggle" id="menuToggle" aria-label="Mở menu">☰</button>
         </div>
-    </section>
+      </nav>
 
-    <!-- Features -->
-    <section class="features fade-in" id="features">
-        <h2 class="section-title">Tại sao chọn FilmPro?</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-tools"></i>
-                </div>
-                <h3>Thi công chuyên nghiệp</h3>
-                <p>Đội ngũ kỹ thuật viên 10+ năm kinh nghiệm, sử dụng máy móc hiện đại</p>
+      <div class="mobile-menu" id="mobileMenu">
+        <ul>
+          <li><a href="#hero">Trang chủ</a></li>
+          <li><a href="#pricing">Bảng giá</a></li>
+          <li><a href="#services">Dịch vụ</a></li>
+          <li><a href="#benefits">Ưu điểm</a></li>
+          <li><a href="#reviews">Đánh giá</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#contact">Liên hệ</a></li>
+        </ul>
+        <a class="btn btn-primary" href="#contact">Liên hệ tư vấn</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="container hero-wrap">
+      <div class="hero-copy reveal">
+        <div class="eyebrow">Giải pháp website bảng giá full giao diện</div>
+        <h2>Tăng độ tin tưởng, <span>trình bày giá rõ ràng</span>, chốt khách nhanh hơn</h2>
+        <p>Đây là mẫu landing page bảng giá được dựng theo hướng bán hàng thực tế: có hero mạnh, bảng giá nổi bật, lợi ích rõ ràng, feedback, FAQ và form liên hệ để khách xem xong là có thể để lại thông tin ngay.</p>
+        <div class="hero-actions">
+          <a href="#pricing" class="btn btn-primary">Xem bảng giá</a>
+          <a href="#contact" class="btn btn-secondary">Yêu cầu tư vấn</a>
+        </div>
+        <div class="hero-metrics">
+          <div class="metric">
+            <strong>03</strong>
+            <span>Gói dịch vụ rõ ràng</span>
+          </div>
+          <div class="metric">
+            <strong>24/7</strong>
+            <span>Hỗ trợ tư vấn nhanh</span>
+          </div>
+          <div class="metric">
+            <strong>100%</strong>
+            <span>Bố cục dễ sửa về sau</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="hero-panel">
+          <div class="visual-banner">
+            <div class="floating-badge">Mẫu web thương mại cao</div>
+            <div class="visual-info">
+              <h3>Web bảng giá full layout</h3>
+              <p>Phù hợp để thay nội dung cho film cách nhiệt, nội thất, spa, dịch vụ quảng cáo, xây dựng, showroom hoặc nhiều mô hình bán hàng khác.</p>
+              <div class="visual-list">
+                <div>Bảng giá là tâm điểm chính của trang</div>
+                <div>Thiết kế sang, hiện đại, dễ nhìn</div>
+                <div>Responsive chuẩn cho điện thoại</div>
+              </div>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <h3>Bảo hành 10 năm</h3>
-                <p>Cam kết chất lượng với chính sách bảo hành rõ ràng, minh bạch</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust -->
+  <section class="section">
+    <div class="container">
+      <div class="reveal">
+        <div class="eyebrow">Điểm mạnh nổi bật</div>
+        <h2 class="section-title">Một mẫu web không chỉ đẹp mà còn có khả năng bán hàng</h2>
+        <p class="section-subtitle">Phần này giúp khách hiểu nhanh vì sao nên chọn dịch vụ của bạn. Nội dung có thể thay lại theo đúng ngành nghề chỉ sau vài phút chỉnh sửa.</p>
+      </div>
+
+      <div class="grid-4 trust-grid">
+        <div class="card trust-card reveal">
+          <div class="icon">⚡</div>
+          <h3>Thi công nhanh</h3>
+          <p>Quy trình rõ ràng, hỗ trợ tư vấn nhanh, dễ chốt lịch và dễ xử lý khách cần báo giá gấp.</p>
+        </div>
+        <div class="card trust-card reveal">
+          <div class="icon">🛡</div>
+          <h3>Bảo hành rõ ràng</h3>
+          <p>Thông tin minh bạch giúp khách cảm thấy an tâm hơn trước khi ra quyết định.</p>
+        </div>
+        <div class="card trust-card reveal">
+          <div class="icon">💎</div>
+          <h3>Hình ảnh chuyên nghiệp</h3>
+          <p>Bố cục sang, khoảng trắng đẹp, font dễ đọc và nhấn đúng các điểm cần chuyển đổi.</p>
+        </div>
+        <div class="card trust-card reveal">
+          <div class="icon">📞</div>
+          <h3>CTA rõ ràng</h3>
+          <p>Nút liên hệ và form xuất hiện đúng vị trí để khách xem xong là có thể hành động ngay.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="pricing-head reveal">
+        <div>
+          <div class="eyebrow">Pricing Section</div>
+          <h2 class="section-title">Chọn gói phù hợp với nhu cầu của bạn</h2>
+          <p class="section-subtitle">Bạn có thể thay tên gói, giá tiền, quyền lợi, nút CTA và mô tả theo đúng ngành của mình. Mẫu này đang dùng nội dung minh hoạ để bạn nhìn ra cấu trúc hoàn chỉnh.</p>
+        </div>
+        <a href="#contact" class="btn btn-secondary">Nhận bảng giá chi tiết</a>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="card price-card reveal">
+          <div class="plan">Gói Cơ Bản</div>
+          <div class="plan-note">Phù hợp với nhu cầu khởi đầu, cần mức chi phí dễ tiếp cận nhưng vẫn đảm bảo đầy đủ tính chuyên nghiệp.</div>
+          <div class="price">
+            <strong>1.990.000đ</strong>
+            <span>/ gói</span>
+          </div>
+          <ul class="price-list">
+            <li>Tư vấn nhanh theo nhu cầu thực tế</li>
+            <li>Thiết kế bố cục tiêu chuẩn</li>
+            <li>Tối ưu hiển thị trên mobile</li>
+            <li>Hỗ trợ chỉnh sửa nội dung cơ bản</li>
+            <li>Nút CTA và form liên hệ sẵn</li>
+          </ul>
+          <a href="#contact" class="btn btn-secondary">Chọn gói này</a>
+        </div>
+
+        <div class="card price-card popular reveal">
+          <div class="tag">Phổ biến nhất</div>
+          <div class="plan">Gói Nâng Cao</div>
+          <div class="plan-note">Giải pháp cân bằng giữa chi phí và hiệu quả, phù hợp cho người cần giao diện đẹp hơn và chốt khách tốt hơn.</div>
+          <div class="price">
+            <strong>3.990.000đ</strong>
+            <span>/ gói</span>
+          </div>
+          <ul class="price-list">
+            <li>Toàn bộ tính năng của Gói Cơ Bản</li>
+            <li>Thiết kế nổi bật section bảng giá</li>
+            <li>Thêm gallery hình ảnh và feedback</li>
+            <li>FAQ đóng mở bằng JavaScript</li>
+            <li>Tăng điểm nhấn thương hiệu và CTA</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary">Đăng ký gói nổi bật</a>
+        </div>
+
+        <div class="card price-card reveal">
+          <div class="plan">Gói Cao Cấp</div>
+          <div class="plan-note">Phù hợp với thương hiệu cần landing page chỉnh chu, mang cảm giác premium và phục vụ mục tiêu chuyển đổi mạnh hơn.</div>
+          <div class="price">
+            <strong>5.990.000đ</strong>
+            <span>/ gói</span>
+          </div>
+          <ul class="price-list">
+            <li>Bố cục thương mại cao cấp hơn</li>
+            <li>Ưu tiên visual, hiệu ứng và trải nghiệm</li>
+            <li>Section chi tiết dịch vụ chuyên sâu</li>
+            <li>Tối ưu mạnh cho hành vi người xem</li>
+            <li>Hỗ trợ chỉnh sửa nội dung nhiều hơn</li>
+          </ul>
+          <a href="#contact" class="btn btn-secondary">Yêu cầu tư vấn</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="reveal">
+        <div class="eyebrow">Chi tiết dịch vụ</div>
+        <h2 class="section-title">Có thể tách riêng từng hạng mục để khách dễ hiểu hơn</h2>
+        <p class="section-subtitle">Phần này rất hợp để đưa các hạng mục như kính lái, kính sườn, nội thất, công trình, gói thiết kế, gói thi công hoặc từng dòng sản phẩm cụ thể.</p>
+      </div>
+
+      <div class="grid-4 details-grid">
+        <div class="card detail-card reveal">
+          <div class="icon">🚗</div>
+          <h3>Hạng mục 01</h3>
+          <p>Dùng để mô tả nhóm sản phẩm hoặc dịch vụ đầu tiên.</p>
+          <ul>
+            <li>Nội dung rõ ràng, ngắn gọn</li>
+            <li>Dễ thay tên hạng mục theo ngành</li>
+            <li>Phù hợp để gắn giá riêng</li>
+          </ul>
+        </div>
+        <div class="card detail-card reveal">
+          <div class="icon">🏠</div>
+          <h3>Hạng mục 02</h3>
+          <p>Dùng cho nhóm nhu cầu thứ hai với cách trình bày đồng bộ.</p>
+          <ul>
+            <li>Tăng cảm giác minh bạch</li>
+            <li>Khách dễ so sánh hơn</li>
+            <li>Bố cục card dễ nhìn</li>
+          </ul>
+        </div>
+        <div class="card detail-card reveal">
+          <div class="icon">🧰</div>
+          <h3>Hạng mục 03</h3>
+          <p>Phù hợp để giải thích các gói nâng cấp hoặc option thêm.</p>
+          <ul>
+            <li>Trình bày bullet nhanh gọn</li>
+            <li>Dễ đọc trên điện thoại</li>
+            <li>Tạo logic cho phần báo giá</li>
+          </ul>
+        </div>
+        <div class="card detail-card reveal">
+          <div class="icon">📦</div>
+          <h3>Hạng mục 04</h3>
+          <p>Có thể đổi thành dịch vụ bảo trì, combo, phụ kiện hoặc ưu đãi.</p>
+          <ul>
+            <li>Hỗ trợ mở rộng nội dung</li>
+            <li>Tăng độ chuyên nghiệp toàn trang</li>
+            <li>Phù hợp cho nhiều lĩnh vực</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits -->
+  <section class="section" id="benefits">
+    <div class="container">
+      <div class="reveal">
+        <div class="eyebrow">Ưu điểm nổi bật</div>
+        <h2 class="section-title">Những lý do giúp khách dễ ra quyết định hơn</h2>
+        <p class="section-subtitle">Phần lợi ích nên dùng ngôn ngữ đơn giản, thực tế, đọc là hiểu ngay. Đây là nơi chuyển từ mô tả dịch vụ sang lý do mua hàng.</p>
+      </div>
+
+      <div class="grid-3 feature-grid">
+        <div class="card feature-card reveal">
+          <div class="icon">🌡</div>
+          <h3>Giảm băn khoăn</h3>
+          <p>Bố cục rõ ràng giúp khách đỡ rối và dễ hiểu dịch vụ hơn ngay từ lần đầu truy cập.</p>
+        </div>
+        <div class="card feature-card reveal">
+          <div class="icon">✨</div>
+          <h3>Tăng hình ảnh thương hiệu</h3>
+          <p>Thiết kế chỉn chu khiến khách có cảm giác thương hiệu của bạn nghiêm túc và đáng tin hơn.</p>
+        </div>
+        <div class="card feature-card reveal">
+          <div class="icon">🎯</div>
+          <h3>Nhấn đúng CTA</h3>
+          <p>Điểm nhấn được dồn vào khu vực quan trọng như bảng giá, nút báo giá và form liên hệ.</p>
+        </div>
+        <div class="card feature-card reveal">
+          <div class="icon">📱</div>
+          <h3>Chuẩn mobile</h3>
+          <p>Khách xem bằng điện thoại vẫn dễ đọc, không vỡ khối, không bị chật chữ hay khó bấm nút.</p>
+        </div>
+        <div class="card feature-card reveal">
+          <div class="icon">🔍</div>
+          <h3>Dễ quét thông tin</h3>
+          <p>Heading rõ, giá lớn, bullet gọn giúp khách lướt nhanh mà vẫn nắm được ý chính.</p>
+        </div>
+        <div class="card feature-card reveal">
+          <div class="icon">🤝</div>
+          <h3>Hỗ trợ chốt khách</h3>
+          <p>Các phần feedback, FAQ và form liên hệ giúp giảm ngại hỏi và tăng khả năng để lại thông tin.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews -->
+  <section class="section" id="reviews">
+    <div class="container">
+      <div class="reveal">
+        <div class="eyebrow">Khách hàng nói gì</div>
+        <h2 class="section-title">Feedback giúp tăng niềm tin rất mạnh</h2>
+        <p class="section-subtitle">Bạn có thể thay ảnh đại diện, tên khách, nội dung đánh giá và số sao theo feedback thật để phần này thuyết phục hơn nữa.</p>
+      </div>
+
+      <div class="grid-3 testimonial-grid">
+        <div class="card testimonial reveal">
+          <div class="stars">★★★★★</div>
+          <p>“Web nhìn sang và dễ hiểu hơn hẳn bản cũ. Khách vào xem bảng giá nhanh, hỏi báo giá cũng nhiều hơn trước.”</p>
+          <h3>Nguyễn Minh K.</h3>
+          <small>Chủ showroom dịch vụ</small>
+        </div>
+        <div class="card testimonial reveal">
+          <div class="stars">★★★★★</div>
+          <p>“Tôi thích nhất là phần bảng giá rất rõ, gói nổi bật nhìn vào là biết nên chọn phương án nào.”</p>
+          <h3>Trần Thu H.</h3>
+          <small>Khách hàng doanh nghiệp nhỏ</small>
+        </div>
+        <div class="card testimonial reveal">
+          <div class="stars">★★★★★</div>
+          <p>“Mobile hiển thị rất ổn, khách xem trên điện thoại vẫn đọc được hết chứ không bị rối như nhiều web khác.”</p>
+          <h3>Lê Hoàng P.</h3>
+          <small>Người kinh doanh online</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="section">
+    <div class="container">
+      <div class="reveal">
+        <div class="eyebrow">Hình ảnh thực tế</div>
+        <h2 class="section-title">Gallery giúp website trực quan và có chiều sâu hơn</h2>
+        <p class="section-subtitle">Bạn chỉ cần thay ảnh placeholder bằng ảnh sản phẩm, công trình hoặc hình thi công thực tế là phần này sẽ nâng độ tin tưởng lên rất nhiều.</p>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gallery-item large reveal">
+          <img src="https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1200&q=80" alt="gallery 1">
+          <div class="gallery-caption">Hình ảnh nổi bật / công trình chính</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80" alt="gallery 2">
+          <div class="gallery-caption">Dự án / sản phẩm 01</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80" alt="gallery 3">
+          <div class="gallery-caption">Dự án / sản phẩm 02</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="https://images.unsplash.com/photo-1493238792000-8113da705763?auto=format&fit=crop&w=900&q=80" alt="gallery 4">
+          <div class="gallery-caption">Dự án / sản phẩm 03</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=900&q=80" alt="gallery 5">
+          <div class="gallery-caption">Dự án / sản phẩm 04</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="reveal">
+        <div class="eyebrow">Câu hỏi thường gặp</div>
+        <h2 class="section-title">FAQ để gỡ bớt nghi ngại trước khi khách nhắn tin</h2>
+        <p class="section-subtitle">Đây là phần rất nên có vì khách thường lướt nhanh. Nếu được trả lời sẵn các câu hỏi phổ biến, tỷ lệ thoát trang sẽ giảm đi đáng kể.</p>
+      </div>
+
+      <div class="faq-wrap">
+        <div class="faq-item reveal active">
+          <button class="faq-question"><span>Giá hiển thị đã bao gồm đầy đủ chưa?</span><span>+</span></button>
+          <div class="faq-answer" style="max-height: 200px;">
+            <p>Hiện tại đây là giá mẫu để minh hoạ bố cục. Bạn có thể thay thành giá thực tế và ghi rõ đã bao gồm những gì như công lắp, vật tư, bảo hành hoặc ưu đãi đi kèm.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <button class="faq-question"><span>Tôi có thể đổi nội dung theo ngành của mình không?</span><span>+</span></button>
+          <div class="faq-answer">
+            <p>Có. Toàn bộ tiêu đề, mô tả, gói giá, hình ảnh, lợi ích, feedback và thông tin liên hệ đều có thể sửa rất nhanh trong mã nguồn.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <button class="faq-question"><span>Website này có dùng được trên điện thoại không?</span><span>+</span></button>
+          <div class="faq-answer">
+            <p>Có. Layout đã được làm responsive để card tự xuống cột, menu đổi thành hamburger và nút bấm vẫn đủ lớn để thao tác trên mobile.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <button class="faq-question"><span>Tôi muốn thêm section khác thì có khó không?</span><span>+</span></button>
+          <div class="faq-answer">
+            <p>Không khó. Cấu trúc code đã chia section rõ ràng nên bạn có thể thêm video, bảng chi tiết, banner khuyến mãi hoặc form khác khá thuận tiện.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="reveal">
+        <div class="eyebrow">Liên hệ ngay</div>
+        <h2 class="section-title">Để lại thông tin để nhận báo giá nhanh</h2>
+        <p class="section-subtitle">Bạn có thể đổi phần này thành hotline thật, link Zalo, Facebook, địa chỉ showroom và các trường form đúng theo quy trình chốt khách của bạn.</p>
+      </div>
+
+      <div class="contact-layout">
+        <div class="card contact-box reveal">
+          <h3>Thông tin liên hệ</h3>
+          <p>Phần này nên để thật rõ, vì đây là nơi khách quyết định gọi ngay hay để lại form.</p>
+          <ul class="contact-list">
+            <li>
+              <strong>Hotline</strong>
+              0848 99 1012
+            </li>
+            <li>
+              <strong>Zalo</strong>
+              zalo.me/0848991012
+            </li>
+            <li>
+              <strong>Facebook</strong>
+              fb.com/ten-thuong-hieu-cua-ban
+            </li>
+            <li>
+              <strong>Địa chỉ</strong>
+              20 Đường số 4, Khu đô thị Vạn Phúc, Thủ Đức, TP.HCM
+            </li>
+          </ul>
+          <p class="mini-note">Mẹo: Nếu bạn muốn tăng chuyển đổi, hãy để hotline, Zalo và CTA xuất hiện đồng thời ở cả header, giữa trang và cuối trang.</p>
+        </div>
+
+        <div class="card form-card reveal">
+          <h3>Form yêu cầu tư vấn</h3>
+          <p class="section-subtitle" style="max-width: unset; margin-top: 6px;">Điền thông tin cơ bản để đội ngũ liên hệ lại nhanh hơn.</p>
+          <form>
+            <div class="field">
+              <label>Họ và tên</label>
+              <input type="text" placeholder="Nhập họ và tên" />
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fas fa-tag"></i>
-                </div>
-                <h3>Gi
+            <div class="field">
+              <label>Số điện thoại</label>
+              <input type="tel" placeholder="Nhập số điện thoại" />
+            </div>
+            <div class="field">
+              <label>Nhu cầu quan tâm</label>
+              <select>
+                <option>Chọn nhu cầu</option>
+                <option>Gói Cơ Bản</option>
+                <option>Gói Nâng Cao</option>
+                <option>Gói Cao Cấp</option>
+                <option>Cần tư vấn thêm</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Nội dung</label>
+              <textarea placeholder="Mô tả nhu cầu của bạn..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Gửi yêu cầu ngay</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-wrap">
+      <div>© 2026 Bảng Giá Pro. All rights reserved.</div>
+      <div class="footer-links">
+        <a href="#hero">Trang chủ</a>
+        <a href="#pricing">Bảng giá</a>
+        <a href="#services">Dịch vụ</a>
+        <a href="#contact">Liên hệ</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating CTA -->
+  <div class="floating-cta">
+    <a href="#contact">Báo giá</a>
+    <a href="tel:0848991012">Gọi</a>
+  </div>
+
+  <script>
+    const header = document.getElementById('topHeader');
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const faqItems = document.querySelectorAll('.faq-item');
+    const revealEls = document.querySelectorAll('.reveal');
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('open');
+      menuToggle.textContent = mobileMenu.classList.contains('open') ? '✕' : '☰';
+    });
+
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        menuToggle.textContent = '☰';
+      });
+    });
+
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      const answer = item.querySelector('.faq-answer');
+
+      question.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+
+        faqItems.forEach(other => {
+          other.classList.remove('active');
+          other.querySelector('.faq-answer').style.maxHeight = null;
+        });
+
+        if (!isActive) {
+          item.classList.add('active');
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+        }
+      });
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    revealEls.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
