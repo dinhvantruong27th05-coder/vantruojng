@@ -3,205 +3,139 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thanh Xuân Của Tôi</title>
+<title>Kỉ Niệm Thanh Xuân</title>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js"></script>
 
 <style>
-body {
-  margin:0;
-  font-family: Arial;
-  background: linear-gradient(135deg,#ffe0ec,#e0f0ff);
-}
-
-/* HEADER */
-header {
-  text-align:center;
-  padding:20px;
-  color:#333;
-}
-
-/* FORM */
-.form {
-  background:#fff;
-  padding:20px;
-  margin:20px auto;
-  max-width:500px;
-  border-radius:15px;
-}
-
-.form input, .form textarea {
-  width:100%;
-  padding:10px;
-  margin:8px 0;
-}
-
-/* BUTTON */
-button {
-  padding:10px;
-  background:#ff6fae;
-  border:none;
-  color:#fff;
-  cursor:pointer;
-  border-radius:8px;
-}
-
-/* SEARCH */
-.search {
-  text-align:center;
-  margin:20px;
-}
-
-.search input {
-  padding:10px;
-  width:300px;
-}
-
-/* GALLERY */
-.gallery {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:15px;
-  padding:20px;
-}
-
-.card {
-  background:#fff;
-  border-radius:10px;
-  overflow:hidden;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
-  transition:0.3s;
-}
-
-.card:hover {
-  transform:translateY(-5px);
-}
-
-.card img {
-  width:100%;
-  height:200px;
-  object-fit:cover;
-}
-
-.card .info {
-  padding:10px;
-}
-
-.delete {
-  background:red;
-  margin-top:10px;
-}
-
-/* LIGHTBOX */
-.lightbox {
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.8);
-  display:none;
-  justify-content:center;
-  align-items:center;
-}
-
-.lightbox img {
-  max-width:80%;
-  max-height:80%;
-}
-
-/* MOBILE */
-@media(max-width:600px){
-  .search input {
-    width:90%;
-  }
-}
+body{font-family:sans-serif;background:#111;color:#fff;text-align:center}
+button{padding:10px;margin:5px;cursor:pointer}
+.post{background:#222;margin:10px;padding:10px;border-radius:10px}
+img,video{max-width:100%;border-radius:10px}
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1>📸 Thanh Xuân Của Tôi</h1>
-</header>
+<h1>📸 Thanh Xuân</h1>
 
-<div class="form">
-  <input type="file" id="image">
-  <input type="text" id="title" placeholder="Tiêu đề">
-  <textarea id="desc" placeholder="Mô tả"></textarea>
-  <button onclick="addImage()">Lưu kỉ niệm</button>
-</div>
+<button onclick="login()">Đăng nhập Google</button>
+<button onclick="logout()">Đăng xuất</button>
 
-<div class="search">
-  <input type="text" id="search" placeholder="Tìm kiếm..." oninput="render()">
-</div>
+<br><br>
 
-<div class="gallery" id="gallery"></div>
+<input type="file" id="file" accept="image/*,video/*">
+<input type="text" id="caption" placeholder="Viết gì đó...">
+<button onclick="upload()">Đăng</button>
 
-<div class="lightbox" id="lightbox" onclick="this.style.display='none'">
-  <img id="lightImg">
-</div>
+<div id="feed"></div>
+
+<audio id="music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
+<button onclick="toggleMusic()">🎵 Nhạc</button>
 
 <script>
-let data = JSON.parse(localStorage.getItem("memories")) || [];
+const firebaseConfig = {
+  apiKey: "DÁN VÀO",
+  authDomain: "DÁN VÀO",
+  projectId: "DÁN VÀO",
+  storageBucket: "DÁN VÀO",
+  messagingSenderId: "DÁN VÀO",
+  appId: "DÁN VÀO"
+};
 
-function addImage(){
-  let file = document.getElementById("image").files[0];
-  let title = document.getElementById("title").value;
-  let desc = document.getElementById("desc").value;
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
 
-  if(!file) return alert("Chọn ảnh!");
+let user = null;
 
-  let reader = new FileReader();
-  reader.onload = function(){
-    data.push({
-      img: reader.result,
-      title,
-      desc,
-      date: new Date().toLocaleDateString()
-    });
-
-    localStorage.setItem("memories", JSON.stringify(data));
-    render();
-  }
-  reader.readAsDataURL(file);
+function login(){
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider);
 }
 
-function render(){
-  let gallery = document.getElementById("gallery");
-  let keyword = document.getElementById("search").value.toLowerCase();
+function logout(){
+  auth.signOut();
+}
 
-  gallery.innerHTML = "";
+auth.onAuthStateChanged(u=>{
+  user = u;
+  loadPosts();
+});
 
-  data.forEach((item, index)=>{
-    if(item.title.toLowerCase().includes(keyword) || item.desc.toLowerCase().includes(keyword)){
-      gallery.innerHTML += `
-        <div class="card">
-          <img src="${item.img}" onclick="view('${item.img}')">
-          <div class="info">
-            <h3>${item.title}</h3>
-            <p>${item.desc}</p>
-            <small>${item.date}</small>
-            <button class="delete" onclick="del(${index})">Xóa</button>
-          </div>
-        </div>
-      `;
-    }
+async function upload(){
+  let file = document.getElementById("file").files[0];
+  let caption = document.getElementById("caption").value;
+
+  if(!file) return alert("Chọn file!");
+
+  let ref = storage.ref("posts/"+Date.now());
+  await ref.put(file);
+  let url = await ref.getDownloadURL();
+
+  await db.collection("posts").add({
+    url,
+    type:file.type,
+    caption,
+    likes:0,
+    comments:[],
+    user:user.displayName
+  });
+
+  loadPosts();
+}
+
+async function loadPosts(){
+  let feed = document.getElementById("feed");
+  feed.innerHTML = "";
+
+  let snap = await db.collection("posts").get();
+
+  snap.forEach(doc=>{
+    let p = doc.data();
+
+    let media = p.type.startsWith("image")
+      ? `<img src="${p.url}">`
+      : `<video src="${p.url}" controls></video>`;
+
+    feed.innerHTML += `
+      <div class="post">
+        <h3>${p.user}</h3>
+        ${media}
+        <p>${p.caption}</p>
+        <button onclick="like('${doc.id}',${p.likes})">❤️ ${p.likes}</button>
+        <input placeholder="comment" onkeydown="if(event.key==='Enter') comment('${doc.id}',this.value)">
+      </div>
+    `;
   });
 }
 
-function del(i){
-  if(confirm("Xóa ảnh?")){
-    data.splice(i,1);
-    localStorage.setItem("memories", JSON.stringify(data));
-    render();
-  }
+async function like(id,likes){
+  await db.collection("posts").doc(id).update({
+    likes:likes+1
+  });
+  loadPosts();
 }
 
-function view(src){
-  document.getElementById("lightbox").style.display = "flex";
-  document.getElementById("lightImg").src = src;
+async function comment(id,text){
+  let ref = db.collection("posts").doc(id);
+  let doc = await ref.get();
+  let comments = doc.data().comments || [];
+
+  comments.push(text);
+
+  await ref.update({comments});
+  loadPosts();
 }
 
-render();
+function toggleMusic(){
+  let m = document.getElementById("music");
+  m.paused ? m.play() : m.pause();
+}
 </script>
 
 </body>
