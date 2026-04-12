@@ -1,345 +1,740 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Draw Flowers 🌸</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-  <style>
-html, body {
-  font-family: 'Pacifico', cursive;
-  overflow: hidden;
-  padding: 0;
-  margin: 0;
-}
-.container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: start;
-}
-.clean-btn {
-  z-index: 1;
-  font-family: sans-serif;
-  font-size: 15px;
-  color: white;
-  text-shadow: 0 0 5px rgba(255,255,255,0.8);
-  user-select: none;
-  padding: 8px 16px;
-  margin: 20px;
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  backdrop-filter: blur(5px);
-  box-shadow: 0 0 10px rgba(255,255,200,0.5);
-  transition: all 0.3s ease;
-  opacity: 0.5;
-  font-family: 'Pacifico', cursive;
-}
-.clean-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 20px rgba(255,255,200,0.8);
-  transform: scale(1.05);
-  opacity: 1;
-}
-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: block;
-}
-.name {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  transform: translate(-50%, -50%);
-  color: white;
-  text-align: center;
-  font-size: 4vw;
-  text-shadow: 0 0 5px #000000;
-  user-select: auto;
-  pointer-events: none;
-  opacity: 0.1;
-}
-@media all and (min-width: 640px) {
-  .name {
-    font-size: 45px
-  }
-}
-  </style>
-</head>
-<body>
-  <div class="container">
-    <canvas id="canvas"></canvas>
-    <div class="clean-btn">Clean</div>
-  </div>
-  <div class="name">Click To Add Flowers</div>
-
-  <script type="x-shader/x-fragment" id="fragmentShader">
-        #define PI 3.14159265359
-
-        uniform float u_ratio;
-        uniform vec2 u_cursor;
-        uniform float u_stop_time;
-        uniform float u_clean;
-        uniform vec2 u_stop_randomizer;
-
-        uniform sampler2D u_texture;
-        varying vec2 vUv;
-
-        // --------------------------------
-        // 2D noise
-
-        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-        vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-        vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
-        float snoise(vec2 v) {
-            const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
-            vec2 i = floor(v + dot(v, C.yy));
-            vec2 x0 = v - i + dot(i, C.xx);
-            vec2 i1;
-            i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-            vec4 x12 = x0.xyxy + C.xxzz;
-            x12.xy -= i1;
-            i = mod289(i);
-            vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
-            vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);
-            m = m*m;
-            m = m*m;
-            vec3 x = 2.0 * fract(p * C.www) - 1.0;
-            vec3 h = abs(x) - 0.5;
-            vec3 ox = floor(x + 0.5);
-            vec3 a0 = x - ox;
-            m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
-            vec3 g;
-            g.x = a0.x * x0.x + h.x * x0.y;
-            g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-            return 130.0 * dot(m, g);
-        }
-
-
-        float get_flower_shape(vec2 _p, float _pet_n, float _angle, float _outline) {
-            _angle *= 3.;
-
-            _p = vec2(_p.x * cos(_angle) - _p.y * sin(_angle),
-            _p.x * sin(_angle) + _p.y * cos(_angle));
-
-            float a = atan(_p.y, _p.x);
-
-            float flower_sectoral_shape = pow(abs(sin(a * _pet_n)), .4) + .25;
-
-            vec2 flower_size_range = vec2(.03, .1);
-            float size = flower_size_range[0] + u_stop_randomizer[0] * flower_size_range[1];
-
-            float flower_radial_shape = pow(length(_p) / size, 2.);
-            flower_radial_shape -= .1 * sin(8. * a); // add noise
-            flower_radial_shape = max(.1, flower_radial_shape);
-            flower_radial_shape += smoothstep(0., 0.03, -_p.y + .2 * abs(_p.x));
-
-            float grow_time = step(.25, u_stop_time) * pow(u_stop_time, .3);
-            float flower_shape = 1. - smoothstep(0., flower_sectoral_shape, _outline * flower_radial_shape / grow_time);
-
-            flower_shape *= (1. - step(1., grow_time));
-
-            return flower_shape;
-        }
-
-        float get_stem_shape(vec2 _p, vec2 _uv, float _w, float _angle) {
-
-          _w = max(.004, _w);
-        
-            float x_offset = _p.y * sin(_angle);
-            x_offset *= pow(3. * _uv.y, 2.);
-            _p.x -= x_offset;
-
-            // add horizontal noise to the cursor coordinale
-            float noise_power = .5;
-            float cursor_horizontal_noise = noise_power * snoise(2. * _uv * u_stop_randomizer[0]);
-            cursor_horizontal_noise *= pow(dot(_p.y, _p.y), .6);// moise to be zero at cursor
-            cursor_horizontal_noise *= pow(dot(_uv.y, _uv.y), .3);// moise to be zero at bottom
-            _p.x += cursor_horizontal_noise;
-
-            // vertical line through the cursor point (_p.x)
-            float left = smoothstep(-_w, 0., _p.x);
-            float right = 1. - smoothstep(0., _w, _p.x);
-            float stem_shape = left * right;
-
-            // make it grow + don't go up to the cursor point
-            float grow_time = 1. - smoothstep(0., .2, u_stop_time);
-            float stem_top_mask = smoothstep(0., pow(grow_time, .5), .03 -_p.y);
-            stem_shape *= stem_top_mask;
-
-            // stop drawing once done
-            stem_shape *= (1. - step(.17, u_stop_time));
-
-            return stem_shape;
-        }
-
-        void main() {
-
-            vec3 base = texture2D(u_texture, vUv).xyz;
-
-            vec2 uv = vUv;
-            uv.x *= u_ratio;
-            vec2 cursor = vUv - u_cursor.xy;
-            cursor.x *= u_ratio;
-            
-            vec3 stem_color = vec3(.1 + u_stop_randomizer[0] * .6, .6, .2);
-            vec3 flower_color = vec3(.6 + .5 * u_stop_randomizer[1], .1, .9 - .5 * u_stop_randomizer[1]);
-
-            float angle = .5 * (u_stop_randomizer[0] - .5);
-
-            float stem_shape = get_stem_shape(cursor, uv, .003, angle);
-            stem_shape += get_stem_shape(cursor + vec2(0., .2 + .5 * u_stop_randomizer[0]), uv, .003, angle);
-            float stem_mask = 1. - get_stem_shape(cursor, uv, .004, angle);
-            stem_mask -= get_stem_shape(cursor + vec2(0., .2 + .5 * u_stop_randomizer[0]), uv, .004, angle);
-
-            float petals_back_number = 1. + floor(u_stop_randomizer[0] * 2.);
-            float angle_offset = -(2. * step(0., angle) - 1.) * .1 * u_stop_time;
-            float flower_back_shape = get_flower_shape(cursor, petals_back_number, angle + angle_offset, 1.5);
-            float flower_back_mask = 1. - get_flower_shape(cursor, petals_back_number, angle + angle_offset, 1.6);
-
-            float petals_front_number = 2. + floor(u_stop_randomizer[1] * 2.);
-            float flower_front_shape = get_flower_shape(cursor, petals_front_number, angle, 1.);
-            float flower_front_mask = 1. - get_flower_shape(cursor, petals_front_number, angle, .95);
-
-            vec3 color = base;
-            color *= stem_mask;
-            color *= flower_back_mask;
-            color *= flower_front_mask;
-
-            color += (stem_shape * stem_color);
-
-            color += (flower_back_shape * (flower_color + vec3(0., .8 * u_stop_time, 0.)));
-            color += (flower_front_shape * flower_color);
-
-            color.r *= 1. - (.5 * flower_back_shape * flower_front_shape);
-            color.b *= 1. - (flower_back_shape * flower_front_shape);
-
-
-            color *= u_clean;
-
-            gl_FragColor = vec4(color, 1.);
-        }
-  
-  </script>
-
-  <script type="x-shader/x-vertex" id="vertexShader">
-    varying vec2 vUv;
-    void main() {
-      vUv = uv;
-      gl_Position = vec4(position, 1.);
-    }
-  
-  </script>
-
-  <script type="module">
-import * as THREE from "https://cdn.skypack.dev/three@0.133.1/build/three.module";
-const canvasEl = document.querySelector("#canvas");
-const cleanBtn = document.querySelector(".clean-btn");
-const pointer = { x: .66, y: .3, clicked: true };
-window.setTimeout(() => {
-  pointer.x = .75;
-  pointer.y = .5;
-  pointer.clicked = true;
-}, 700);
-let basicMaterial, shaderMaterial;
-let renderer = new THREE.WebGLRenderer({ canvas: canvasEl, alpha: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-let sceneShader = new THREE.Scene();
-let sceneBasic = new THREE.Scene();
-let camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 10);
-let clock = new THREE.Clock();
-let renderTargets = [
-  new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight),
-  new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight)
-];
-createPlane();
-updateSize();
-window.addEventListener("resize", () => { updateSize(); cleanCanvas(); });
-render();
-let isTouchScreen = false;
-
-window.addEventListener("click", e => {
-  if (!isTouchScreen) {
-    pointer.x = e.pageX / window.innerWidth;
-    pointer.y = e.pageY / window.innerHeight;
-    pointer.clicked = true;
-    createExplosion(e.pageX, e.pageY);
-  }
-});
-window.addEventListener("touchstart", e => {
-  isTouchScreen = true;
-  pointer.x = e.targetTouches[0].pageX / window.innerWidth;
-  pointer.y = e.targetTouches[0].pageY / window.innerHeight;
-  pointer.clicked = true;
-  createExplosion(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
-});
-cleanBtn.addEventListener("click", cleanCanvas);
-
-function cleanCanvas() {
-  pointer.vanishCanvas = true;
-  setTimeout(() => { pointer.vanishCanvas = false; }, 50);
-}
-function createPlane() {
-  shaderMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-      u_stop_time: { value: 0. },
-      u_stop_randomizer: { value: new THREE.Vector2(Math.random(), Math.random()) },
-      u_cursor: { value: new THREE.Vector2(pointer.x, pointer.y) },
-      u_ratio: { value: window.innerWidth / window.innerHeight },
-      u_texture: { value: null },
-      u_clean: { value: 1. },
-    },
-    vertexShader: document.getElementById("vertexShader").textContent,
-    fragmentShader: document.getElementById("fragmentShader").textContent
-  });
-  basicMaterial = new THREE.MeshBasicMaterial();
-  const planeGeometry = new THREE.PlaneGeometry(2, 2);
-  const planeBasic = new THREE.Mesh(planeGeometry, basicMaterial);
-  const planeShader = new THREE.Mesh(planeGeometry, shaderMaterial);
-  sceneBasic.add(planeBasic);
-  sceneShader.add(planeShader);
-}
-function render() {
-  shaderMaterial.uniforms.u_clean.value = pointer.vanishCanvas ? 0 : 1;
-  shaderMaterial.uniforms.u_texture.value = renderTargets[0].texture;
-  if (pointer.clicked) {
-    shaderMaterial.uniforms.u_cursor.value = new THREE.Vector2(pointer.x, 1 - pointer.y);
-    shaderMaterial.uniforms.u_stop_randomizer.value = new THREE.Vector2(Math.random(), Math.random());
-    shaderMaterial.uniforms.u_stop_time.value = 0.;
-    pointer.clicked = false;
-  }
-  shaderMaterial.uniforms.u_stop_time.value += clock.getDelta();
-  renderer.setRenderTarget(renderTargets[1]);
-  renderer.render(sceneShader, camera);
-  basicMaterial.map = renderTargets[1].texture;
-  renderer.setRenderTarget(null);
-  renderer.render(sceneBasic, camera);
-  let tmp = renderTargets[0];
-  renderTargets[0] = renderTargets[1];
-  renderTargets[1] = tmp;
-  requestAnimationFrame(render);
-}
-function updateSize() {
-  if (shaderMaterial && shaderMaterial.uniforms && shaderMaterial.uniforms.u_ratio) {
-    shaderMaterial.uniforms.u_ratio.value = window.innerWidth / window.innerHeight;
-  }
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderTargets.forEach((target) => target.setSize(window.innerWidth, window.innerHeight));
-}
-
-function createExplosion() {
-  // Fallback no-op because the original HTML referenced ./style/script.js,
-  // but that file was not included in the uploaded set.
-}
-
-  </script>
-</body>
-</html>
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/index.html b/index.html
+index bca75b30074d6f66eb6718afecd1b812cd7b0490..c5ecfefa2be2350d95024ed1c348622d20ab27d9 100644
+--- a/index.html
++++ b/index.html
+@@ -1,345 +1,404 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="vi">
+ <head>
+-  <meta charset="UTF-8">
+-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-  <title>Draw Flowers 🌸</title>
+-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
++  <meta charset="UTF-8" />
++  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++  <title>Form Tạo Web Phong Cảnh Chi Tiết</title>
+   <style>
+-html, body {
+-  font-family: 'Pacifico', cursive;
+-  overflow: hidden;
+-  padding: 0;
+-  margin: 0;
+-}
+-.container {
+-  position: fixed;
+-  top: 0;
+-  left: 0;
+-  width: 100%;
+-  height: 100vh;
+-  display: flex;
+-  flex-direction: column-reverse;
+-  align-items: start;
+-}
+-.clean-btn {
+-  z-index: 1;
+-  font-family: sans-serif;
+-  font-size: 15px;
+-  color: white;
+-  text-shadow: 0 0 5px rgba(255,255,255,0.8);
+-  user-select: none;
+-  padding: 8px 16px;
+-  margin: 20px;
+-  cursor: pointer;
+-  background: rgba(255, 255, 255, 0.05);
+-  border: 1px solid rgba(255, 255, 255, 0.2);
+-  border-radius: 8px;
+-  backdrop-filter: blur(5px);
+-  box-shadow: 0 0 10px rgba(255,255,200,0.5);
+-  transition: all 0.3s ease;
+-  opacity: 0.5;
+-  font-family: 'Pacifico', cursive;
+-}
+-.clean-btn:hover {
+-  background: rgba(255, 255, 255, 0.15);
+-  box-shadow: 0 0 20px rgba(255,255,200,0.8);
+-  transform: scale(1.05);
+-  opacity: 1;
+-}
+-canvas {
+-  position: absolute;
+-  top: 0;
+-  left: 0;
+-  display: block;
+-}
+-.name {
+-  position: fixed;
+-  top: 50%;
+-  left: 50%;
+-  width: 100%;
+-  transform: translate(-50%, -50%);
+-  color: white;
+-  text-align: center;
+-  font-size: 4vw;
+-  text-shadow: 0 0 5px #000000;
+-  user-select: auto;
+-  pointer-events: none;
+-  opacity: 0.1;
+-}
+-@media all and (min-width: 640px) {
+-  .name {
+-    font-size: 45px
+-  }
+-}
+-  </style>
+-</head>
+-<body>
+-  <div class="container">
+-    <canvas id="canvas"></canvas>
+-    <div class="clean-btn">Clean</div>
+-  </div>
+-  <div class="name">Click To Add Flowers</div>
+-
+-  <script type="x-shader/x-fragment" id="fragmentShader">
+-        #define PI 3.14159265359
+-
+-        uniform float u_ratio;
+-        uniform vec2 u_cursor;
+-        uniform float u_stop_time;
+-        uniform float u_clean;
+-        uniform vec2 u_stop_randomizer;
+-
+-        uniform sampler2D u_texture;
+-        varying vec2 vUv;
+-
+-        // --------------------------------
+-        // 2D noise
+-
+-        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+-        vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+-        vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+-        float snoise(vec2 v) {
+-            const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+-            vec2 i = floor(v + dot(v, C.yy));
+-            vec2 x0 = v - i + dot(i, C.xx);
+-            vec2 i1;
+-            i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+-            vec4 x12 = x0.xyxy + C.xxzz;
+-            x12.xy -= i1;
+-            i = mod289(i);
+-            vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+-            vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);
+-            m = m*m;
+-            m = m*m;
+-            vec3 x = 2.0 * fract(p * C.www) - 1.0;
+-            vec3 h = abs(x) - 0.5;
+-            vec3 ox = floor(x + 0.5);
+-            vec3 a0 = x - ox;
+-            m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+-            vec3 g;
+-            g.x = a0.x * x0.x + h.x * x0.y;
+-            g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+-            return 130.0 * dot(m, g);
+-        }
+-
+-
+-        float get_flower_shape(vec2 _p, float _pet_n, float _angle, float _outline) {
+-            _angle *= 3.;
+-
+-            _p = vec2(_p.x * cos(_angle) - _p.y * sin(_angle),
+-            _p.x * sin(_angle) + _p.y * cos(_angle));
+-
+-            float a = atan(_p.y, _p.x);
+-
+-            float flower_sectoral_shape = pow(abs(sin(a * _pet_n)), .4) + .25;
+-
+-            vec2 flower_size_range = vec2(.03, .1);
+-            float size = flower_size_range[0] + u_stop_randomizer[0] * flower_size_range[1];
+-
+-            float flower_radial_shape = pow(length(_p) / size, 2.);
+-            flower_radial_shape -= .1 * sin(8. * a); // add noise
+-            flower_radial_shape = max(.1, flower_radial_shape);
+-            flower_radial_shape += smoothstep(0., 0.03, -_p.y + .2 * abs(_p.x));
+-
+-            float grow_time = step(.25, u_stop_time) * pow(u_stop_time, .3);
+-            float flower_shape = 1. - smoothstep(0., flower_sectoral_shape, _outline * flower_radial_shape / grow_time);
+-
+-            flower_shape *= (1. - step(1., grow_time));
+-
+-            return flower_shape;
+-        }
+-
+-        float get_stem_shape(vec2 _p, vec2 _uv, float _w, float _angle) {
+-
+-          _w = max(.004, _w);
+-        
+-            float x_offset = _p.y * sin(_angle);
+-            x_offset *= pow(3. * _uv.y, 2.);
+-            _p.x -= x_offset;
+-
+-            // add horizontal noise to the cursor coordinale
+-            float noise_power = .5;
+-            float cursor_horizontal_noise = noise_power * snoise(2. * _uv * u_stop_randomizer[0]);
+-            cursor_horizontal_noise *= pow(dot(_p.y, _p.y), .6);// moise to be zero at cursor
+-            cursor_horizontal_noise *= pow(dot(_uv.y, _uv.y), .3);// moise to be zero at bottom
+-            _p.x += cursor_horizontal_noise;
+-
+-            // vertical line through the cursor point (_p.x)
+-            float left = smoothstep(-_w, 0., _p.x);
+-            float right = 1. - smoothstep(0., _w, _p.x);
+-            float stem_shape = left * right;
+-
+-            // make it grow + don't go up to the cursor point
+-            float grow_time = 1. - smoothstep(0., .2, u_stop_time);
+-            float stem_top_mask = smoothstep(0., pow(grow_time, .5), .03 -_p.y);
+-            stem_shape *= stem_top_mask;
+-
+-            // stop drawing once done
+-            stem_shape *= (1. - step(.17, u_stop_time));
+-
+-            return stem_shape;
+-        }
+-
+-        void main() {
+-
+-            vec3 base = texture2D(u_texture, vUv).xyz;
+-
+-            vec2 uv = vUv;
+-            uv.x *= u_ratio;
+-            vec2 cursor = vUv - u_cursor.xy;
+-            cursor.x *= u_ratio;
+-            
+-            vec3 stem_color = vec3(.1 + u_stop_randomizer[0] * .6, .6, .2);
+-            vec3 flower_color = vec3(.6 + .5 * u_stop_randomizer[1], .1, .9 - .5 * u_stop_randomizer[1]);
+-
+-            float angle = .5 * (u_stop_randomizer[0] - .5);
+-
+-            float stem_shape = get_stem_shape(cursor, uv, .003, angle);
+-            stem_shape += get_stem_shape(cursor + vec2(0., .2 + .5 * u_stop_randomizer[0]), uv, .003, angle);
+-            float stem_mask = 1. - get_stem_shape(cursor, uv, .004, angle);
+-            stem_mask -= get_stem_shape(cursor + vec2(0., .2 + .5 * u_stop_randomizer[0]), uv, .004, angle);
+-
+-            float petals_back_number = 1. + floor(u_stop_randomizer[0] * 2.);
+-            float angle_offset = -(2. * step(0., angle) - 1.) * .1 * u_stop_time;
+-            float flower_back_shape = get_flower_shape(cursor, petals_back_number, angle + angle_offset, 1.5);
+-            float flower_back_mask = 1. - get_flower_shape(cursor, petals_back_number, angle + angle_offset, 1.6);
++    :root {
++      --bg: #0b1220;
++      --card: rgba(14, 25, 45, 0.85);
++      --line: rgba(143, 197, 255, 0.25);
++      --text: #eaf3ff;
++      --muted: #adc6e7;
++      --accent: #5fd4ff;
++      --accent-2: #4d8fff;
++      --ok: #63e6be;
++    }
+ 
+-            float petals_front_number = 2. + floor(u_stop_randomizer[1] * 2.);
+-            float flower_front_shape = get_flower_shape(cursor, petals_front_number, angle, 1.);
+-            float flower_front_mask = 1. - get_flower_shape(cursor, petals_front_number, angle, .95);
++    * { box-sizing: border-box; }
++
++    body {
++      margin: 0;
++      font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
++      background:
++        radial-gradient(circle at 20% 10%, rgba(95, 212, 255, 0.18), transparent 40%),
++        radial-gradient(circle at 80% 0%, rgba(77, 143, 255, 0.25), transparent 35%),
++        linear-gradient(160deg, #050b17 0%, #091327 50%, #0b1b33 100%);
++      color: var(--text);
++      min-height: 100vh;
++      padding: 28px 16px 50px;
++    }
+ 
+-            vec3 color = base;
+-            color *= stem_mask;
+-            color *= flower_back_mask;
+-            color *= flower_front_mask;
++    .container {
++      width: min(980px, 100%);
++      margin: 0 auto;
++    }
+ 
+-            color += (stem_shape * stem_color);
++    .hero {
++      margin-bottom: 20px;
++      padding: 22px;
++      border: 1px solid var(--line);
++      border-radius: 16px;
++      background: rgba(10, 22, 41, 0.7);
++      backdrop-filter: blur(6px);
++    }
+ 
+-            color += (flower_back_shape * (flower_color + vec3(0., .8 * u_stop_time, 0.)));
+-            color += (flower_front_shape * flower_color);
++    h1 {
++      margin: 0 0 8px;
++      font-size: clamp(1.45rem, 2.3vw, 2rem);
++      letter-spacing: 0.2px;
++    }
+ 
+-            color.r *= 1. - (.5 * flower_back_shape * flower_front_shape);
+-            color.b *= 1. - (flower_back_shape * flower_front_shape);
++    .sub {
++      margin: 0;
++      color: var(--muted);
++      line-height: 1.55;
++      font-size: 0.98rem;
++    }
+ 
++    form {
++      display: grid;
++      gap: 16px;
++    }
+ 
+-            color *= u_clean;
++    fieldset {
++      margin: 0;
++      border: 1px solid var(--line);
++      border-radius: 14px;
++      background: var(--card);
++      padding: 16px;
++    }
+ 
+-            gl_FragColor = vec4(color, 1.);
+-        }
+-  
+-  </script>
++    legend {
++      font-weight: 700;
++      color: #d8ebff;
++      padding: 0 8px;
++    }
+ 
+-  <script type="x-shader/x-vertex" id="vertexShader">
+-    varying vec2 vUv;
+-    void main() {
+-      vUv = uv;
+-      gl_Position = vec4(position, 1.);
++    .grid {
++      display: grid;
++      grid-template-columns: repeat(2, minmax(0, 1fr));
++      gap: 12px;
+     }
+-  
+-  </script>
+ 
+-  <script type="module">
+-import * as THREE from "https://cdn.skypack.dev/three@0.133.1/build/three.module";
+-const canvasEl = document.querySelector("#canvas");
+-const cleanBtn = document.querySelector(".clean-btn");
+-const pointer = { x: .66, y: .3, clicked: true };
+-window.setTimeout(() => {
+-  pointer.x = .75;
+-  pointer.y = .5;
+-  pointer.clicked = true;
+-}, 700);
+-let basicMaterial, shaderMaterial;
+-let renderer = new THREE.WebGLRenderer({ canvas: canvasEl, alpha: true });
+-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+-let sceneShader = new THREE.Scene();
+-let sceneBasic = new THREE.Scene();
+-let camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 10);
+-let clock = new THREE.Clock();
+-let renderTargets = [
+-  new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight),
+-  new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight)
+-];
+-createPlane();
+-updateSize();
+-window.addEventListener("resize", () => { updateSize(); cleanCanvas(); });
+-render();
+-let isTouchScreen = false;
+-
+-window.addEventListener("click", e => {
+-  if (!isTouchScreen) {
+-    pointer.x = e.pageX / window.innerWidth;
+-    pointer.y = e.pageY / window.innerHeight;
+-    pointer.clicked = true;
+-    createExplosion(e.pageX, e.pageY);
+-  }
+-});
+-window.addEventListener("touchstart", e => {
+-  isTouchScreen = true;
+-  pointer.x = e.targetTouches[0].pageX / window.innerWidth;
+-  pointer.y = e.targetTouches[0].pageY / window.innerHeight;
+-  pointer.clicked = true;
+-  createExplosion(e.targetTouches[0].pageX, e.targetTouches[0].pageY);
+-});
+-cleanBtn.addEventListener("click", cleanCanvas);
+-
+-function cleanCanvas() {
+-  pointer.vanishCanvas = true;
+-  setTimeout(() => { pointer.vanishCanvas = false; }, 50);
+-}
+-function createPlane() {
+-  shaderMaterial = new THREE.ShaderMaterial({
+-    uniforms: {
+-      u_stop_time: { value: 0. },
+-      u_stop_randomizer: { value: new THREE.Vector2(Math.random(), Math.random()) },
+-      u_cursor: { value: new THREE.Vector2(pointer.x, pointer.y) },
+-      u_ratio: { value: window.innerWidth / window.innerHeight },
+-      u_texture: { value: null },
+-      u_clean: { value: 1. },
+-    },
+-    vertexShader: document.getElementById("vertexShader").textContent,
+-    fragmentShader: document.getElementById("fragmentShader").textContent
+-  });
+-  basicMaterial = new THREE.MeshBasicMaterial();
+-  const planeGeometry = new THREE.PlaneGeometry(2, 2);
+-  const planeBasic = new THREE.Mesh(planeGeometry, basicMaterial);
+-  const planeShader = new THREE.Mesh(planeGeometry, shaderMaterial);
+-  sceneBasic.add(planeBasic);
+-  sceneShader.add(planeShader);
+-}
+-function render() {
+-  shaderMaterial.uniforms.u_clean.value = pointer.vanishCanvas ? 0 : 1;
+-  shaderMaterial.uniforms.u_texture.value = renderTargets[0].texture;
+-  if (pointer.clicked) {
+-    shaderMaterial.uniforms.u_cursor.value = new THREE.Vector2(pointer.x, 1 - pointer.y);
+-    shaderMaterial.uniforms.u_stop_randomizer.value = new THREE.Vector2(Math.random(), Math.random());
+-    shaderMaterial.uniforms.u_stop_time.value = 0.;
+-    pointer.clicked = false;
+-  }
+-  shaderMaterial.uniforms.u_stop_time.value += clock.getDelta();
+-  renderer.setRenderTarget(renderTargets[1]);
+-  renderer.render(sceneShader, camera);
+-  basicMaterial.map = renderTargets[1].texture;
+-  renderer.setRenderTarget(null);
+-  renderer.render(sceneBasic, camera);
+-  let tmp = renderTargets[0];
+-  renderTargets[0] = renderTargets[1];
+-  renderTargets[1] = tmp;
+-  requestAnimationFrame(render);
+-}
+-function updateSize() {
+-  if (shaderMaterial && shaderMaterial.uniforms && shaderMaterial.uniforms.u_ratio) {
+-    shaderMaterial.uniforms.u_ratio.value = window.innerWidth / window.innerHeight;
+-  }
+-  renderer.setSize(window.innerWidth, window.innerHeight);
+-  renderTargets.forEach((target) => target.setSize(window.innerWidth, window.innerHeight));
+-}
+-
+-function createExplosion() {
+-  // Fallback no-op because the original HTML referenced ./style/script.js,
+-  // but that file was not included in the uploaded set.
+-}
++    .full { grid-column: 1 / -1; }
++
++    label {
++      display: block;
++      margin: 0 0 5px;
++      font-size: 0.9rem;
++      color: #dcecff;
++      font-weight: 550;
++    }
++
++    input[type="text"],
++    textarea,
++    select {
++      width: 100%;
++      border: 1px solid rgba(147, 197, 253, 0.35);
++      border-radius: 10px;
++      background: rgba(5, 13, 25, 0.8);
++      color: var(--text);
++      padding: 10px 11px;
++      font-size: 0.95rem;
++      outline: none;
++      transition: border-color 0.2s ease, box-shadow 0.2s ease;
++    }
++
++    textarea { min-height: 86px; resize: vertical; }
++
++    input:focus,
++    textarea:focus,
++    select:focus {
++      border-color: var(--accent);
++      box-shadow: 0 0 0 3px rgba(95, 212, 255, 0.18);
++    }
++
++    .check-grid {
++      display: grid;
++      grid-template-columns: repeat(3, minmax(0, 1fr));
++      gap: 9px;
++    }
++
++    .checkbox {
++      display: flex;
++      align-items: center;
++      gap: 8px;
++      font-size: 0.92rem;
++      color: #e7f3ff;
++      padding: 7px 8px;
++      border: 1px solid rgba(148, 191, 242, 0.25);
++      border-radius: 9px;
++      background: rgba(5, 13, 24, 0.5);
++    }
++
++    .checkbox input { accent-color: var(--accent-2); }
++
++    .actions {
++      display: flex;
++      gap: 10px;
++      flex-wrap: wrap;
++      margin-top: 4px;
++    }
++
++    button {
++      border: 0;
++      border-radius: 10px;
++      padding: 10px 14px;
++      font-size: 0.95rem;
++      font-weight: 650;
++      cursor: pointer;
++    }
++
++    .btn-primary {
++      background: linear-gradient(135deg, var(--accent), var(--accent-2));
++      color: #001b2f;
++    }
+ 
++    .btn-secondary {
++      background: rgba(145, 184, 226, 0.16);
++      color: #dbeeff;
++      border: 1px solid rgba(155, 199, 245, 0.28);
++    }
++
++    #result {
++      white-space: pre-wrap;
++      margin-top: 14px;
++      padding: 12px;
++      border-radius: 12px;
++      border: 1px dashed rgba(156, 223, 255, 0.35);
++      background: rgba(4, 10, 19, 0.78);
++      color: #dff7ff;
++      font-size: 0.92rem;
++      line-height: 1.55;
++      display: none;
++    }
++
++    .hint {
++      margin: 3px 0 0;
++      font-size: 0.82rem;
++      color: #9bc2e4;
++    }
++
++    @media (max-width: 820px) {
++      .grid,
++      .check-grid {
++        grid-template-columns: 1fr;
++      }
++      .full { grid-column: auto; }
++    }
++  </style>
++</head>
++<body>
++  <main class="container">
++    <section class="hero">
++      <h1>FORM TẠO WEB PHONG CẢNH CHI TIẾT</h1>
++      <p class="sub">
++        Điền thông tin bên dưới để AI tạo website phong cảnh theo đúng ý bạn. Sau khi bấm
++        <strong>Xuất mô tả</strong>, bạn có thể copy phần kết quả để gửi trực tiếp cho AI/code generator.
++      </p>
++    </section>
++
++    <form id="landscape-form">
++      <fieldset>
++        <legend>1. Mục đích web</legend>
++        <div class="grid">
++          <div><label for="siteName">Tên website</label><input id="siteName" type="text" /></div>
++          <div><label for="mainTopic">Chủ đề chính</label><input id="mainTopic" type="text" /></div>
++          <div class="full"><label for="siteGoal">Mục tiêu website</label><textarea id="siteGoal" placeholder="Ví dụ: giới thiệu địa điểm du lịch, trưng bày ảnh phong cảnh, blog thiên nhiên..."></textarea></div>
++        </div>
++      </fieldset>
++
++      <fieldset>
++        <legend>2. Phong cách thiết kế</legend>
++        <div class="grid">
++          <div><label for="designStyle">Phong cách tổng thể</label><input id="designStyle" type="text" /></div>
++          <div><label for="primaryTone">Tông màu chính</label><input id="primaryTone" type="text" /></div>
++          <div><label for="bgColor">Màu nền</label><input id="bgColor" type="text" /></div>
++          <div><label for="textColor">Màu chữ</label><input id="textColor" type="text" /></div>
++          <div class="full"><label for="effects">Hiệu ứng mong muốn</label><textarea id="effects" placeholder="Ví dụ: parallax, fade-in, hover đẹp, mây trôi, sóng nước..."></textarea></div>
++        </div>
++      </fieldset>
++
++      <fieldset>
++        <legend>3. Nội dung trang</legend>
++        <div class="grid">
++          <div class="full"><label for="heroTitle">Tiêu đề lớn ở đầu trang</label><input id="heroTitle" type="text" /></div>
++          <div class="full"><label for="shortDesc">Đoạn mô tả ngắn</label><textarea id="shortDesc"></textarea></div>
++          <div><label for="mainBtn">Nút bấm chính</label><input id="mainBtn" type="text" /></div>
++          <div class="full">
++            <label>Nội dung các phần cần có</label>
++            <div class="check-grid">
++              <label class="checkbox"><input type="checkbox" name="sections" value="Trang chủ" />Trang chủ</label>
++              <label class="checkbox"><input type="checkbox" name="sections" value="Giới thiệu" />Giới thiệu</label>
++              <label class="checkbox"><input type="checkbox" name="sections" value="Bộ sưu tập ảnh" />Bộ sưu tập ảnh</label>
++              <label class="checkbox"><input type="checkbox" name="sections" value="Video phong cảnh" />Video phong cảnh</label>
++              <label class="checkbox"><input type="checkbox" name="sections" value="Địa điểm nổi bật" />Địa điểm nổi bật</label>
++              <label class="checkbox"><input type="checkbox" name="sections" value="Blog / bài viết" />Blog / bài viết</label>
++              <label class="checkbox"><input type="checkbox" name="sections" value="Liên hệ" />Liên hệ</label>
++              <label class="checkbox"><input type="checkbox" name="sections" value="Bản đồ" />Bản đồ</label>
++              <label class="checkbox"><input type="checkbox" name="sections" value="Đánh giá khách hàng" />Đánh giá khách hàng</label>
++            </div>
++          </div>
++        </div>
++      </fieldset>
++
++      <fieldset>
++        <legend>4. Bố cục mong muốn</legend>
++        <div class="grid">
++          <div><label for="topMenu">Có menu trên cùng không</label><select id="topMenu"><option>Có</option><option>Không</option></select></div>
++          <div><label for="heroBanner">Có banner lớn đầu trang không</label><select id="heroBanner"><option>Có</option><option>Không</option></select></div>
++          <div><label for="slider">Có slider ảnh không</label><select id="slider"><option>Có</option><option>Không</option></select></div>
++          <div><label for="gridGallery">Có gallery dạng lưới không</label><select id="gridGallery"><option>Có</option><option>Không</option></select></div>
++          <div><label for="footer">Có footer không</label><select id="footer"><option>Có</option><option>Không</option></select></div>
++          <div><label for="pageType">Web 1 trang hay nhiều trang</label><input id="pageType" type="text" /></div>
++          <div class="full"><label for="layout">Bố cục rộng toàn màn hình hay dạng khung</label><input id="layout" type="text" /></div>
++        </div>
++      </fieldset>
++
++      <fieldset>
++        <legend>5. Hình ảnh</legend>
++        <div class="grid">
++          <div><label for="sceneType">Loại cảnh muốn dùng</label><input id="sceneType" type="text" /></div>
++          <div><label for="imageStyle">Ảnh thật hay minh hoạ</label><input id="imageStyle" type="text" /></div>
++          <div><label for="fullBg">Ảnh nền toàn màn hình</label><select id="fullBg"><option>Có</option><option>Không</option></select></div>
++          <div><label for="bgVideo">Video nền</label><select id="bgVideo"><option>Có</option><option>Không</option></select></div>
++          <div class="full"><label for="logo">Có muốn chèn logo không</label><input id="logo" type="text" placeholder="Ví dụ: Có, logo góc trái trên" /></div>
++        </div>
++      </fieldset>
++
++      <fieldset>
++        <legend>6. Chức năng</legend>
++        <div class="grid">
++          <div><label for="responsive">Responsive điện thoại</label><select id="responsive"><option>Có</option><option>Không</option></select></div>
++          <div><label for="themeSwitch">Nút chuyển sáng/tối</label><select id="themeSwitch"><option>Có</option><option>Không</option></select></div>
++          <div><label for="searchBar">Thanh tìm kiếm</label><select id="searchBar"><option>Có</option><option>Không</option></select></div>
++          <div><label for="contactForm">Form liên hệ</label><select id="contactForm"><option>Có</option><option>Không</option></select></div>
++          <div><label for="smoothScroll">Hiệu ứng cuộn mượt</label><select id="smoothScroll"><option>Có</option><option>Không</option></select></div>
++          <div><label for="bgMusic">Nhạc nền</label><select id="bgMusic"><option>Có</option><option>Không</option></select></div>
++        </div>
++      </fieldset>
++
++      <fieldset>
++        <legend>7. Kỹ thuật</legend>
++        <div class="grid">
++          <div><label for="stack">Muốn viết bằng</label><input id="stack" type="text" placeholder="HTML/CSS/JS, React, Next.js, Vue..." /></div>
++          <div><label for="singleFile">Có cần gộp 1 file không</label><select id="singleFile"><option>Có</option><option>Không</option></select></div>
++          <div><label for="editable">Dễ sửa ảnh và nội dung</label><select id="editable"><option>Có</option><option>Không</option></select></div>
++          <div><label for="performance">Tối ưu tốc độ tải trang</label><select id="performance"><option>Có</option><option>Không</option></select></div>
++          <div class="full"><label for="onlineImages">Chèn link ảnh online sẵn</label><input id="onlineImages" type="text" placeholder="Ví dụ: Có, dùng Unsplash/Pexels" /></div>
++        </div>
++      </fieldset>
++
++      <fieldset>
++        <legend>8. Yêu cầu đặc biệt</legend>
++        <div class="grid">
++          <div><label for="usage">Web dùng cho</label><input id="usage" type="text" /></div>
++          <div><label for="referenceStyle">Muốn giống phong cách website nào</label><input id="referenceStyle" type="text" /></div>
++          <div><label for="specialAni">Animation đặc biệt</label><input id="specialAni" type="text" /></div>
++          <div><label for="seo">Chuẩn SEO</label><select id="seo"><option>Có</option><option>Không</option></select></div>
++          <div class="full"><label for="language">Tiếng Việt hay song ngữ</label><input id="language" type="text" placeholder="Ví dụ: Tiếng Việt / Việt - Anh" /></div>
++        </div>
++      </fieldset>
++
++      <fieldset>
++        <legend>9. Kết quả muốn AI trả về</legend>
++        <div class="check-grid">
++          <label class="checkbox"><input type="checkbox" name="outputs" value="Code đầy đủ" />Code đầy đủ</label>
++          <label class="checkbox"><input type="checkbox" name="outputs" value="Gộp thành 1 file HTML" />Gộp thành 1 file HTML</label>
++          <label class="checkbox"><input type="checkbox" name="outputs" value="Tách file HTML/CSS/JS" />Tách file HTML/CSS/JS</label>
++          <label class="checkbox"><input type="checkbox" name="outputs" value="Có sẵn ảnh demo" />Có sẵn ảnh demo</label>
++          <label class="checkbox"><input type="checkbox" name="outputs" value="Có sẵn nội dung mẫu" />Có sẵn nội dung mẫu</label>
++          <label class="checkbox"><input type="checkbox" name="outputs" value="Có hướng dẫn chỉnh sửa" />Có hướng dẫn chỉnh sửa</label>
++        </div>
++        <p class="hint">Mẹo: Bạn có thể chọn nhiều mục để AI trả về đầy đủ hơn.</p>
++      </fieldset>
++
++      <div class="actions">
++        <button class="btn-primary" type="button" id="exportBtn">Xuất mô tả</button>
++        <button class="btn-secondary" type="reset">Làm mới form</button>
++      </div>
++      <pre id="result"></pre>
++    </form>
++  </main>
++
++  <script>
++    const byId = (id) => document.getElementById(id);
++    const pickChecked = (name) => [...document.querySelectorAll(`input[name="${name}"]:checked`)].map((el) => el.value);
++
++    byId("exportBtn").addEventListener("click", () => {
++      const sections = pickChecked("sections");
++      const outputs = pickChecked("outputs");
++
++      const result = [
++        "FORM TẠO WEB PHONG CẢNH CHI TIẾT",
++        "",
++        "1. MỤC ĐÍCH WEB",
++        `- Tên website: ${byId("siteName").value || ""}`,
++        `- Chủ đề chính: ${byId("mainTopic").value || ""}`,
++        `- Mục tiêu website: ${byId("siteGoal").value || ""}`,
++        "",
++        "2. PHONG CÁCH THIẾT KẾ",
++        `- Phong cách tổng thể: ${byId("designStyle").value || ""}`,
++        `- Tông màu chính: ${byId("primaryTone").value || ""}`,
++        `- Màu nền: ${byId("bgColor").value || ""}`,
++        `- Màu chữ: ${byId("textColor").value || ""}`,
++        `- Hiệu ứng mong muốn: ${byId("effects").value || ""}`,
++        "",
++        "3. NỘI DUNG TRANG",
++        `- Tiêu đề lớn ở đầu trang: ${byId("heroTitle").value || ""}`,
++        `- Đoạn mô tả ngắn: ${byId("shortDesc").value || ""}`,
++        `- Nút bấm chính: ${byId("mainBtn").value || ""}`,
++        `- Nội dung các phần cần có: ${sections.length ? sections.join(", ") : ""}`,
++        "",
++        "4. BỐ CỤC MONG MUỐN",
++        `- Có menu trên cùng không: ${byId("topMenu").value}`,
++        `- Có banner lớn đầu trang không: ${byId("heroBanner").value}`,
++        `- Có slider ảnh không: ${byId("slider").value}`,
++        `- Có gallery dạng lưới không: ${byId("gridGallery").value}`,
++        `- Có footer không: ${byId("footer").value}`,
++        `- Muốn web 1 trang hay nhiều trang: ${byId("pageType").value || ""}`,
++        `- Muốn bố cục rộng toàn màn hình hay dạng khung: ${byId("layout").value || ""}`,
++        "",
++        "5. HÌNH ẢNH",
++        `- Loại cảnh muốn dùng: ${byId("sceneType").value || ""}`,
++        `- Ảnh thật hay minh hoạ: ${byId("imageStyle").value || ""}`,
++        `- Có cần ảnh nền toàn màn hình không: ${byId("fullBg").value}`,
++        `- Có cần video nền không: ${byId("bgVideo").value}`,
++        `- Có muốn chèn logo không: ${byId("logo").value || ""}`,
++        "",
++        "6. CHỨC NĂNG",
++        `- Có cần responsive điện thoại không: ${byId("responsive").value}`,
++        `- Có cần nút chuyển sáng/tối không: ${byId("themeSwitch").value}`,
++        `- Có cần thanh tìm kiếm không: ${byId("searchBar").value}`,
++        `- Có cần form liên hệ không: ${byId("contactForm").value}`,
++        `- Có cần hiệu ứng cuộn mượt không: ${byId("smoothScroll").value}`,
++        `- Có cần nhạc nền không: ${byId("bgMusic").value}`,
++        "",
++        "7. KỸ THUẬT",
++        `- Muốn viết bằng: ${byId("stack").value || ""}`,
++        `- Có cần gộp 1 file không: ${byId("singleFile").value}`,
++        `- Có cần dễ sửa ảnh và nội dung không: ${byId("editable").value}`,
++        `- Có cần tối ưu tốc độ tải trang không: ${byId("performance").value}`,
++        `- Có cần chèn link ảnh online sẵn không: ${byId("onlineImages").value || ""}`,
++        "",
++        "8. YÊU CẦU ĐẶC BIỆT",
++        `- Web dùng cho: ${byId("usage").value || ""}`,
++        `- Muốn giống phong cách website nào: ${byId("referenceStyle").value || ""}`,
++        `- Có yêu cầu animation đặc biệt không: ${byId("specialAni").value || ""}`,
++        `- Có cần chuẩn SEO không: ${byId("seo").value}`,
++        `- Có cần tiếng Việt hay song ngữ: ${byId("language").value || ""}`,
++        "",
++        "9. KẾT QUẢ MUỐN AI TRẢ VỀ",
++        `- ${outputs.length ? outputs.join("\n- ") : ""}`,
++      ].join("\n");
++
++      const output = byId("result");
++      output.style.display = "block";
++      output.textContent = result;
++      output.scrollIntoView({ behavior: "smooth", block: "nearest" });
++    });
+   </script>
+ </body>
+ </html>
+ 
+EOF
+)
